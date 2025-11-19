@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Element Hider</title>
+    <link rel="stylesheet" href="popup-mini.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Element Hider</h1>
+            <div class="toggle-container">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="enableToggle">
+                    <span class="slider"></span>
+                </label>
+                <span class="toggle-label">启用</span>
+            </div>
+        </header>
+
+        <div class="content">
+            <div class="section">
+                <div class="current-site">
+                    <div class="site-info">
+                        <span class="site-icon">🌐</span>
+                        <div class="site-details">
+                            <div class="site-domain" id="currentDomain">加载中...</div>
+                            <div class="site-status">
+                                <span id="hiddenCount">0</span> 个元素已隐藏
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>添加隐藏规则</h3>
+                <div class="input-group">
+                    <input type="text" id="classNameInput" placeholder="输入CSS选择器 (例如: .advertisement)" maxlength="100">
+                    <button id="addButton">添加</button>
+                </div>
+                <div class="quick-selectors">
+                    <button class="quick-btn" data-selector=".advertisement">广告</button>
+                    <button class="quick-btn" data-selector=".popup">弹窗</button>
+                    <button class="quick-btn" data-selector=".sidebar">侧边栏</button>
+                    <button class="quick-btn" data-selector=".banner">横幅</button>
+                </div>
+                <div class="help-text">
+                    💡 支持CSS选择器：.class-name, #id-name, tag-name, [attribute]
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h3>当前网站规则 <span id="ruleCount">(0)</span></h3>
+                    <div class="filter-tabs">
+                        <button class="filter-tab active" data-filter="current">本站</button>
+                        <button class="filter-tab" data-filter="all">全部</button>
+                    </div>
+                </div>
+                <div class="rules-container">
+                    <ul id="rulesList"></ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="action-buttons">
+                    <button id="inspectButton" class="primary">🔍 选择元素</button>
+                    <button id="refreshButton" class="secondary">🔄 刷新</button>
+                    <button id="clearSiteButton" class="warning">🗑️ 清空本站</button>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="version">v1.0.0</div>
+        </footer>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

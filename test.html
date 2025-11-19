@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Element Hider 测试页面</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            margin: -20px -20px 20px -20px;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .advertisement {
+            background: #ff6b6b;
+            color: white;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .ad-banner {
+            background: #4ecdc4;
+            color: white;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 3px;
+            text-align: center;
+        }
+        
+        .sponsored {
+            background: #45b7d1;
+            color: white;
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #333;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .sidebar-ads {
+            background: #f39c12;
+            color: white;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .social-share {
+            background: #e74c3c;
+            color: white;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 20px;
+            text-align: center;
+        }
+        
+        .content {
+            background: #ecf0f1;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px dashed #bdc3c7;
+            border-radius: 8px;
+        }
+        
+        .test-section h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        
+        .button {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        .button:hover {
+            background: #2980b9;
+        }
+        
+        #dynamic-content {
+            margin-top: 20px;
+        }
+        
+        .video-overlay {
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .promotion {
+            background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            color: #333;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Element Hider 扩展测试页面</h1>
+            <p>这个页面包含各种可以被隐藏的元素，用于测试扩展功能。</p>
+        </div>
+
+        <div class="test-section">
+            <h3>📢 广告元素测试</h3>
+            <p>以下元素使用常见的广告类名，可以通过扩展隐藏：</p>
+            
+            <div class="advertisement">
+                🎯 这是一个广告横幅 (.advertisement)
+            </div>
+            
+            <div class="ad-banner">
+                📱 这是广告横幅 (.ad-banner)
+            </div>
+            
+            <div class="sponsored">
+                💰 这是赞助内容 (.sponsored)
+            </div>
+            
+            <div class="promotion">
+                🎉 这是促销信息 (.promotion)
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>🎨 侧边栏和社交元素</h3>
+            
+            <div class="sidebar-ads">
+                📊 侧边栏广告 (.sidebar-ads)
+            </div>
+            
+            <div class="social-share">
+                📤 社交分享按钮 (.social-share)
+            </div>
+            
+            <div class="video-overlay">
+                🎬 视频覆盖层 (.video-overlay)
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔧 交互测试</h3>
+            <p>使用以下按钮测试动态内容：</p>
+            
+            <button class="button" onclick="showPopup()">显示弹窗</button>
+            <button class="button" onclick="addDynamicAd()">添加动态广告</button>
+            <button class="button" onclick="clearDynamic()">清除动态内容</button>
+            
+            <div id="dynamic-content"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>📝 使用说明</h3>
+            <div class="content">
+                <h4>如何测试扩展：</h4>
+                <ol>
+                    <li><strong>安装扩展</strong>：按照INSTALL.md的说明安装Element Hider扩展</li>
+                    <li><strong>打开扩展面板</strong>：点击浏览器工具栏中的扩展图标</li>
+                    <li><strong>添加隐藏规则</strong>：尝试以下CSS选择器：
+                        <ul>
+                            <li><code>.advertisement</code> - 隐藏广告横幅</li>
+                            <li><code>.ad-banner</code> - 隐藏广告横幅</li>
+                            <li><code>.sponsored</code> - 隐藏赞助内容</li>
+                            <li><code>.sidebar-ads</code> - 隐藏侧边栏广告</li>
+                            <li><code>.social-share</code> - 隐藏社交分享按钮</li>
+                            <li><code>.popup</code> - 隐藏弹窗（先点击"显示弹窗"按钮）</li>
+                        </ul>
+                    </li>
+                    <li><strong>观察效果</strong>：添加规则后，对应的元素应该立即消失</li>
+                    <li><strong>测试开关</strong>：使用扩展面板中的开关来启用/禁用规则</li>
+                </ol>
+                
+                <h4>🆕 新功能测试：</h4>
+                <ul>
+                    <li><strong>网站特定规则</strong>：添加的规则只对当前网站生效</li>
+                    <li><strong>快速选择器</strong>：点击弹窗中的快速按钮（广告、弹窗、侧边栏、横幅）</li>
+                    <li><strong>元素检查模式</strong>：点击"🔍 选择元素"按钮，然后点击页面上的元素</li>
+                    <li><strong>规则过滤</strong>：在弹窗中切换"本站"和"全部"标签</li>
+                    <li><strong>网站信息显示</strong>：弹窗顶部显示当前域名和隐藏元素数量</li>
+                </ul>
+                
+                <h4>高级测试：</h4>
+                <ul>
+                    <li>测试复合选择器：<code>.test-section .advertisement</code></li>
+                    <li>测试ID选择器：<code>#popup</code></li>
+                    <li>测试属性选择器：<code>[class*="ad"]</code></li>
+                    <li>测试动态内容：添加动态广告后再应用规则</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>✅ 预期结果</h3>
+            <div class="content">
+                <p>正确安装和配置扩展后，您应该能够：</p>
+                <ul>
+                    <li>✅ 通过CSS选择器隐藏页面元素</li>
+                    <li>✅ 实时看到隐藏效果（无需刷新页面）</li>
+                    <li>✅ 启用/禁用单个规则</li>
+                    <li>✅ 使用主开关控制整个扩展</li>
+                    <li>✅ 查看当前隐藏的元素数量</li>
+                    <li>✅ 设置在页面刷新后保持有效</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 隐藏的弹窗 -->
+    <div id="popup" class="popup">
+        <h3>🎯 测试弹窗</h3>
+        <p>这是一个测试弹窗，可以通过 .popup 或 #popup 选择器隐藏。</p>
+        <button class="button" onclick="hidePopup()">关闭</button>
+    </div>
+
+    <script>
+        function showPopup() {
+            document.getElementById('popup').style.display = 'block';
+        }
+        
+        function hidePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+        
+        function addDynamicAd() {
+            const container = document.getElementById('dynamic-content');
+            const ad = document.createElement('div');
+            ad.className = 'advertisement';
+            ad.innerHTML = '🚀 动态添加的广告 - ' + new Date().toLocaleTimeString();
+            container.appendChild(ad);
+        }
+        
+        function clearDynamic() {
+            document.getElementById('dynamic-content').innerHTML = '';
+        }
+        
+        // 自动添加一些动态内容用于测试
+        setTimeout(() => {
+            addDynamicAd();
+        }, 2000);
+    </script>
+</body>
+</html>

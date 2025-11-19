@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Element Hider 图标生成器</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .icon-preview {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .icon-item {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .icon-canvas {
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+        }
+        
+        .controls {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .control-group {
+            margin-bottom: 15px;
+        }
+        
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .control-group input, .control-group select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .color-input {
+            width: 60px !important;
+            height: 40px;
+            padding: 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            margin: 5px;
+            transition: transform 0.2s;
+        }
+        
+        .button:hover {
+            transform: translateY(-1px);
+        }
+        
+        .button-secondary {
+            background: #6c757d;
+        }
+        
+        .instructions {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .instructions h3 {
+            color: #1976d2;
+            margin-top: 0;
+        }
+        
+        .download-links {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 Element Hider 图标生成器</h1>
+            <p>快速生成扩展所需的图标文件</p>
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <label>图标样式：</label>
+                <select id="iconStyle">
+                    <option value="eye">👁️ 眼睛图标</option>
+                    <option value="hide">🚫 隐藏图标</option>
+                    <option value="shield">🛡️ 盾牌图标</option>
+                    <option value="filter">🔍 过滤图标</option>
+                    <option value="block">⛔ 阻止图标</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label>背景颜色：</label>
+                <input type="color" id="bgColor" value="#667eea" class="color-input">
+            </div>
+            
+            <div class="control-group">
+                <label>图标颜色：</label>
+                <input type="color" id="iconColor" value="#ffffff" class="color-input">
+            </div>
+            
+            <button class="button" onclick="generateIcons()">生成图标</button>
+            <button class="button button-secondary" onclick="resetSettings()">重置设置</button>
+        </div>
+
+        <div class="icon-preview">
+            <div class="icon-item">
+                <canvas id="icon16" class="icon-canvas" width="16" height="16"></canvas>
+                <div>16x16</div>
+            </div>
+            <div class="icon-item">
+                <canvas id="icon32" class="icon-canvas" width="32" height="32"></canvas>
+                <div>32x32</div>
+            </div>
+            <div class="icon-item">
+                <canvas id="icon48" class="icon-canvas" width="48" height="48"></canvas>
+                <div>48x48</div>
+            </div>
+            <div class="icon-item">
+                <canvas id="icon128" class="icon-canvas" width="128" height="128"></canvas>
+                <div>128x128</div>
+            </div>
+        </div>
+
+        <div class="download-links" id="downloadLinks" style="display: none;">
+            <a id="download16" class="button" download="icon16.png">下载 16x16</a>
+            <a id="download32" class="button" download="icon32.png">下载 32x32</a>
+            <a id="download48" class="button" download="icon48.png">下载 48x48</a>
+            <a id="download128" class="button" download="icon128.png">下载 128x128</a>
+        </div>
+
+        <div class="instructions">
+            <h3>📋 使用说明</h3>
+            <ol>
+                <li><strong>选择图标样式</strong>：从下拉菜单中选择您喜欢的图标样式</li>
+                <li><strong>调整颜色</strong>：点击颜色选择器来自定义背景和图标颜色</li>
+                <li><strong>生成图标</strong>：点击"生成图标"按钮创建所有尺寸的图标</li>
+                <li><strong>下载图标</strong>：点击对应的下载按钮保存图标文件</li>
+                <li><strong>放置文件</strong>：将下载的图标文件放入扩展的 <code>icons/</code> 文件夹中</li>
+            </ol>
+            
+            <p><strong>提示</strong>：生成的图标是简单的几何图形，适合作为临时图标使用。如需专业图标，建议使用专业设计工具或从图标库下载。</p>
+        </div>
+    </div>
+
+    <script>
+        const iconStyles = {
+            eye: '👁️',
+            hide: '🚫', 
+            shield: '🛡️',
+            filter: '🔍',
+            block: '⛔'
+        };
+
+        function generateIcons() {
+            const style = document.getElementById('iconStyle').value;
+            const bgColor = document.getElementById('bgColor').value;
+            const iconColor = document.getElementById('iconColor').value;
+            
+            const sizes = [16, 32, 48, 128];
+            
+            sizes.forEach(size => {
+                const canvas = document.getElementById(`icon${size}`);
+                const ctx = canvas.getContext('2d');
+                
+                // 清除画布
+                ctx.clearRect(0, 0, size, size);
+                
+                // 绘制背景
+                ctx.fillStyle = bgColor;
+                ctx.fillRect(0, 0, size, size);
+                
+                // 绘制图标
+                drawIcon(ctx, style, size, iconColor);
+                
+                // 生成下载链接
+                const downloadLink = document.getElementById(`download${size}`);
+                downloadLink.href = canvas.toDataURL('image/png');
+            });
+            
+            // 显示下载链接
+            document.getElementById('downloadLinks').style.display = 'flex';
+        }
+
+        function drawIcon(ctx, style, size, color) {
+            ctx.fillStyle = color;
+            ctx.strokeStyle = color;
+            ctx.lineWidth = Math.max(1, size / 16);
+            
+            const center = size / 2;
+            const radius = size * 0.3;
+            
+            switch (style) {
+                case 'eye':
+                    drawEye(ctx, center, center, radius, size);
+                    break;
+                case 'hide':
+                    drawHide(ctx, center, center, radius, size);
+                    break;
+                case 'shield':
+                    drawShield(ctx, center, center, radius, size);
+                    break;
+                case 'filter':
+                    drawFilter(ctx, center, center, radius, size);
+                    break;
+                case 'block':
+                    drawBlock(ctx, center, center, radius, size);
+                    break;
+            }
+        }
+
+        function drawEye(ctx, x, y, radius, size) {
+            // 绘制眼睛轮廓
+            ctx.beginPath();
+            ctx.ellipse(x, y, radius * 1.2, radius * 0.7, 0, 0, 2 * Math.PI);
+            ctx.stroke();
+            
+            // 绘制瞳孔
+            ctx.beginPath();
+            ctx.arc(x, y, radius * 0.4, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+
+        function drawHide(ctx, x, y, radius, size) {
+            // 绘制圆圈
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, 2 * Math.PI);
+            ctx.stroke();
+            
+            // 绘制斜线
+            ctx.beginPath();
+            ctx.moveTo(x - radius * 0.7, y - radius * 0.7);
+            ctx.lineTo(x + radius * 0.7, y + radius * 0.7);
+            ctx.stroke();
+        }
+
+        function drawShield(ctx, x, y, radius, size) {
+            // 绘制盾牌形状
+            ctx.beginPath();
+            ctx.moveTo(x, y - radius);
+            ctx.quadraticCurveTo(x + radius * 0.8, y - radius * 0.5, x + radius * 0.6, y);
+            ctx.quadraticCurveTo(x + radius * 0.6, y + radius * 0.8, x, y + radius);
+            ctx.quadraticCurveTo(x - radius * 0.6, y + radius * 0.8, x - radius * 0.6, y);
+            ctx.quadraticCurveTo(x - radius * 0.8, y - radius * 0.5, x, y - radius);
+            ctx.fill();
+        }
+
+        function drawFilter(ctx, x, y, radius, size) {
+            // 绘制漏斗形状
+            ctx.beginPath();
+            ctx.moveTo(x - radius, y - radius * 0.5);
+            ctx.lineTo(x + radius, y - radius * 0.5);
+            ctx.lineTo(x + radius * 0.3, y);
+            ctx.lineTo(x + radius * 0.3, y + radius * 0.8);
+            ctx.lineTo(x - radius * 0.3, y + radius * 0.8);
+            ctx.lineTo(x - radius * 0.3, y);
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        function drawBlock(ctx, x, y, radius, size) {
+            // 绘制八角形停止标志
+            const sides = 8;
+            const angle = (2 * Math.PI) / sides;
+            
+            ctx.beginPath();
+            for (let i = 0; i < sides; i++) {
+                const px = x + radius * Math.cos(i * angle - Math.PI / 2);
+                const py = y + radius * Math.sin(i * angle - Math.PI / 2);
+                if (i === 0) {
+                    ctx.moveTo(px, py);
+                } else {
+                    ctx.lineTo(px, py);
+                }
+            }
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        function resetSettings() {
+            document.getElementById('iconStyle').value = 'eye';
+            document.getElementById('bgColor').value = '#667eea';
+            document.getElementById('iconColor').value = '#ffffff';
+            document.getElementById('downloadLinks').style.display = 'none';
+            
+            // 清除所有画布
+            [16, 32, 48, 128].forEach(size => {
+                const canvas = document.getElementById(`icon${size}`);
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, size, size);
+            });
+        }
+
+        // 页面加载时生成默认图标
+        window.addEventListener('load', () => {
+            generateIcons();
+        });
+    </script>
+</body>
+</html>
