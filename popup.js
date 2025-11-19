@@ -153,6 +153,7 @@ class ElementHiderPopup {
 
     async deleteRule(ruleId) {
         this.rules = this.rules.filter(rule => rule.id !== ruleId);
+        console.log(ruleId,this.rules,  22222)
         await this.saveSettings();
         this.updateRulesList();
         await this.applyRulesToCurrentTab();
@@ -211,14 +212,37 @@ class ElementHiderPopup {
                     <div class="rule-actions">
                         <label class="toggle-switch rule-toggle">
                             <input type="checkbox" ${rule.enabled ? 'checked' : ''} 
-                                   onchange="popup.toggleRule('${rule.id}')">
+                                   data-rule-id="${rule.id}" class="rule-toggle-input">
                             <span class="slider"></span>
                         </label>
-                        <button class="delete-btn" onclick="popup.deleteRule('${rule.id}')">删除</button>
+                        <button class="delete-btn" data-rule-id="${rule.id}">删除</button>
                     </div>
                 </li>
             `;
         }).join('');
+        
+        // 为新创建的元素添加事件监听器
+        this.bindRuleEvents();
+    }
+
+    bindRuleEvents() {
+        // 为切换开关添加事件监听器
+        const toggleInputs = this.rulesList.querySelectorAll('.rule-toggle-input');
+        toggleInputs.forEach(input => {
+            input.addEventListener('change', (e) => {
+                const ruleId = e.target.dataset.ruleId;
+                this.toggleRule(ruleId);
+            });
+        });
+
+        // 为删除按钮添加事件监听器
+        const deleteButtons = this.rulesList.querySelectorAll('.delete-btn');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const ruleId = e.target.dataset.ruleId;
+                this.deleteRule(ruleId);
+            });
+        });
     }
 
     async updateCurrentTab() {
